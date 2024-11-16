@@ -1,52 +1,52 @@
 import { NextResponse } from 'next/server';
-import { unlink } from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 import createConnection from '@/app/lib/db';
-import fs from 'fs'; // Import fs to check file existence
 
 export async function POST(request) {
     const db = await createConnection();
+    
     try {
+        // Parse the JSON body from the request
         const { email } = await request.json();
-        console.log("Removing profile picture for email:", email);
 
         if (!email) {
             return NextResponse.json({ success: false, error: "No email provided" });
         }
 
-        // Retrieve the current image path from the database
+        // Fetch the user to get the image path
         const user = await db.collection('user').findOne({ email });
-        console.log("User retrieved:", user); // Debugging log
-
-        if (!user) {
-            return NextResponse.json({ success: false, error: "User not found" });
+        if (!user || !user.image) {
+            return NextResponse.json({ success: false, error: "No image found for this user" });
         }
 
-        if (!user.image) {
-            return NextResponse.json({ success: false, error: "No image to remove" });
+        // Get the image file path
+        const imagePath = path.join(process.cwd(), 'public', user.image); // Join with public folder
+
+        // Remove the image file from the server
+        try {
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // Synchronously remove the file
+                console.log(`Image file ${imagePath} successfully removed`);
+            } else {
+                console.error(`Image file ${imagePath} does not exist.`);
+                return NextResponse.json({ success: false, error: "Image file does not exist" });
+            }
+        } catch (fileError) {
+            console.error('Error removing image file:', fileError.message);
+            return NextResponse.json({ success: false, error: `Failed to remove image file: ${fileError.message}` });
         }
 
-        const imagePath = path.join(process.cwd(), 'public', user.image);
-        console.log("Image path to remove:", imagePath); // Debugging log
-
-        // Check if the image file exists before trying to unlink it
-        if (!fs.existsSync(imagePath)) {
-            return NextResponse.json({ success: false, error: "Image file does not exist" });
-        }
-
-        // Delete the image file from the filesystem
-        await unlink(imagePath);
-
-        // Update the user's profile picture path in the database
+        // Update the user's image field to null in the database
         await db.collection('user').updateOne(
             { email },
-            { $set: { image: null } } // Set image to null
+            { $unset: { image: "" } } // Unset the image field
         );
 
-        return NextResponse.json({ response: "Profile picture removed successfully", success: true });
+        return NextResponse.json({ response: "Profile image removed successfully", success: true });
 
     } catch (error) {
-        console.error('Error removing profile picture:', error);
-        return NextResponse.json({ error: 'Failed to remove profile picture' }, { status: 500 });
+        console.error('Error removing image:', error.message);
+        return NextResponse.json({ error: `Failed to remove image: ${error.message}` }, { status: 500 });
     }
 }
