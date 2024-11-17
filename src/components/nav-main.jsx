@@ -23,8 +23,8 @@ import { useState, useEffect } from "react";
 
 export function NavMain({ items="" ,  updateinfo="" , updategneinfo =""}) {
 
- console.log("update info response in nav main component ",updateinfo)
- console.log("update geninfo response in nav main component ",updategneinfo)
+//  console.log("update info response in nav main component ",updateinfo)
+//  console.log("update geninfo response in nav main component ",updategneinfo)
 
 
   const [generatorHistory, setGeneratorHistory] = useState(null);
@@ -184,7 +184,7 @@ export function NavMain({ items="" ,  updateinfo="" , updategneinfo =""}) {
                             <a href={subItem.url}>
                              
                  
-                              <div    onClick={() => saveKeyAndNavigate(subItem, item)} 
+                              <div  onClick={() => saveKeyAndNavigate(subItem, item)} 
                                 style={{ cursor: 'pointer' }}>
    
                                  {subItem.title}

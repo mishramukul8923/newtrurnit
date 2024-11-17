@@ -19,11 +19,13 @@ const Humanizer = ({ fetchData }) => {
     useEffect(() => {
         setPlan_id(localStorage.getItem("plan_id"));
         if (localStorage.getItem("keyword")) {
+             fetchHisrotyData();
+             
+            console.log("fetchhistory function call in humanized component")
             if (plan_id == -2 || plan_id == -1) {
                 return
             }
-            fetchHisrotyData()
-            console.log("fetchhistory function call in humanized component")
+           
         }
     }, [fetchData])
 
@@ -72,58 +74,42 @@ const Humanizer = ({ fetchData }) => {
 
 
     const fetchHisrotyData = async () => {
+        try {
+            const data = JSON.parse(localStorage.getItem('keyword'));
+            if (!data) return; // Exit if no keyword data exists
 
-        const data = JSON.parse(localStorage.getItem('keyword'));
-        const createdId = data.createdId;
-        const title = data.title;
+            const { createdId, title } = data;
 
-        if (createdId && title) {
-            console.log("created and title get in humanizer component",title)
-            setText(title);
-            // const fetchHistoryData = async (userId) => {
-            // try {
-            const response = await fetch(`/api/history/humanizer/672daf0549f3b3dcda8d069b`);
-            console.log("created and title get humanize after response ")
+            if (createdId && title) {
+                console.log("created and title get in humanizer component", title);
+                setText(title);
 
-            // Check if the response is successful
-            if (!response.ok) {
-                throw new Error('Failed to fetch history data');
-            }
-            else {
-                // Parse the response as JSON
-                const data = await response.json();
-                // Client-side filtering: Filter data based on title and createdId
-                const filteredData = data.filter(item =>
+                const response = await fetch(`/api/history/humanizer/672daf0549f3b3dcda8d069b`);
+                console.log("created and title get humanize after response",response);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch history data');
+                }
+
+                const responseData = await response.json();
+                const filteredData = responseData.filter(item =>
                     item.text === title && item.createdAt === createdId
                 );
-                // Set the filtered data into state
-                setHumanizedData(filteredData[0]?.humanizedContent);
-                setIsSecondContainerVisible(true)
 
-                // Log the data or handle it as needed
+                setHumanizedData(filteredData[0]?.humanizedContent);
+                setIsSecondContainerVisible(true);
+
+                // Remove keyword after successful operation
                 localStorage.removeItem('keyword');
-                // }
-                // } catch (error) {
-                // console.log('Error:', error);
             }
-            // finally{
-            // console.log("called")
+        } catch (err) {
+            console.error("Error fetching history:", err);
+            // Still remove keyword even if there's an error
+            localStorage.removeItem('keyword');
         }
     };
 
  
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     const fetchRewriteData = async () => {

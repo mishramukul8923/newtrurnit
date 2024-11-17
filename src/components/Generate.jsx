@@ -56,7 +56,7 @@ const Generate = ({fetchData}) => {
             // const fetchHistoryData = async (userId) => {
             // try {
             const response = await fetch('/api/history/generator/672daf0549f3b3dcda8d069b');
-            console.log("this is in generated content hestoryfetch data")
+           
 
             // Check if the response is successful
             if (!response.ok) {

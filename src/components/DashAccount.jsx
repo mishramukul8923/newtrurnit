@@ -23,10 +23,10 @@ import { useRouter } from 'next/navigation';
 const DashAccount = () => {
     const router = useRouter()
     const [userDetails, setUserDetails] = useState({
-        firstname:null,
-        lastname:null,
-        email:null,
-        apikey:null
+        firstname:"",
+        lastname:"",
+        email:"",
+        apikey:"",
     });
     const [image, setImage] = useState(null);
     const [token, setToken] = useState(null);
@@ -393,8 +393,8 @@ const DashAccount = () => {
                                 </DialogHeader>
                                 <div className="grid gap-4 py-4">
                                     <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="name" className="text-right">
-                                            Name
+                                        <Label htmlFor="firstname" className="text-right">
+                                            First Name
                                         </Label>
                                         <Input
                                             id="name"
@@ -403,6 +403,21 @@ const DashAccount = () => {
                                             onChange={(e) => setUserDetails({
                                                 ...userDetails,
                                                 firstname: e.target.value
+                                            })}
+                                            className="col-span-3"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="lastname" className="text-right">
+                                            Last Name
+                                        </Label>
+                                        <Input
+                                            id="name"
+                                            placeholder="Enter Name"
+                                            value={userDetails?.lastname}
+                                            onChange={(e) => setUserDetails({
+                                                ...userDetails,
+                                                lastname: e.target.value
                                             })}
                                             className="col-span-3"
                                         />
