@@ -6,15 +6,12 @@ export async function GET(req, { params }) {
   const { user_id } = await params; // Extract user_id from params
 
   try {
-    // Extract user_id from the route parameters
-    // const { user_id } = req.query; // Fetch user_id from query parameters
-
-  // Validate user_id if needed
+    
   
     // Check if user_id exists and is valid
-    // if (!user_id) {
-    //   return NextResponse.json({ error: "User ID is required" }, { status: 400 });
-    // }
+    if (!user_id) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
 
     // Connect to MongoDB
     const db = await createConnection();

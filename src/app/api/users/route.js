@@ -60,45 +60,120 @@ export const POST = async (req) => {
 };
 
 
-// to update user
+// // to update user
+// export const PUT = async (req) => {
+//     try {
+//         const db = await createConnection();
+//         const body = await req.json();
+//         if (!body.email) {
+//             return NextResponse.json(
+//                 { error: "The 'email' field is required in the request body." },
+//                 { status: 400 }
+//             );
+//         }
+//         const { email, ...updateFields } = body;
+//         if (!Object.keys(updateFields).length) {
+//             return NextResponse.json(
+//                 { error: "At least one key-value pair is required to update." },
+//                 { status: 400 }
+//             );
+//         }
+//         const result = await db.collection('user').findOneAndUpdate(
+//             { email },
+//             { $set: updateFields },
+//             { returnDocument: 'after' }
+//         );
+
+//         // Handle case where user is not found
+//         if (!result.value) {
+//             return NextResponse.json(
+//                 { error: "User not found with the provided email." },
+//                 { status: 404 }
+//             );
+//         }
+
+//         // Return the updated user
+//         return NextResponse.json({
+//             message: "User updated successfully.",
+//             user: result.value,
+//         });
+//     } catch (error) {
+//         // Catch and log any errors
+//         console.error("Database query failed:", error);
+//         return NextResponse.json(
+//             { error: "An internal server error occurred." },
+//             { status: 500 }
+//         );
+//     }
+// };
+
 export const PUT = async (req) => {
     try {
         const db = await createConnection();
         const body = await req.json();
-        if (!body.email) {
-            return NextResponse.json(
-                { error: "The 'email' field is required in the request body." },
-                { status: 400 }
+
+        // Handle user update
+        if (body.email) {
+            const { email, ...updateFields } = body;
+
+            // Validate update fields
+            if (!Object.keys(updateFields).length) {
+                return NextResponse.json(
+                    { error: "At least one key-value pair is required to update." },
+                    { status: 400 }
+                );
+            }
+
+            const userUpdateResult = await db.collection('user').findOneAndUpdate(
+                { email },
+                { $set: updateFields },
+                { returnDocument: 'after' }
             );
+
+            // Check if user was found and updated
+            if (!userUpdateResult.value) {
+                return NextResponse.json(
+                    { error: "User not found with the provided email." },
+                    { status: 404 }
+                );
+            }
+
+            return NextResponse.json({
+                message: "User updated successfully.",
+                user: userUpdateResult.value,
+            });
         }
-        const { email, ...updateFields } = body;
-        if (!Object.keys(updateFields).length) {
-            return NextResponse.json(
-                { error: "At least one key-value pair is required to update." },
-                { status: 400 }
+
+        // Handle API key updates
+        const { gptZeroApiKey, zeroGptApiKey, originalityApiKey, copyLeaksApiKey } = body;
+
+        // Prepare API key data
+        const apiKeyData = {
+            ...(gptZeroApiKey && { gptZeroApiKey }),
+            ...(zeroGptApiKey && { zeroGptApiKey }),
+            ...(originalityApiKey && { originalityApiKey }),
+            ...(copyLeaksApiKey && { copyLeaksApiKey }),
+        };
+
+        if (Object.keys(apiKeyData).length > 0) {
+            const apiKeyUpdateResult = await db.collection('user').updateOne(
+                {},
+                { $set: apiKeyData },
+                { upsert: true }
             );
+
+            return NextResponse.json({
+                message: "API keys updated successfully.",
+                data: apiKeyUpdateResult,
+            }, { status: 200 });
         }
-        const result = await db.collection('user').findOneAndUpdate(
-            { email },
-            { $set: updateFields },
-            { returnDocument: 'after' }
+
+        // Handle case where neither user nor API key updates were provided
+        return NextResponse.json(
+            { error: "No valid fields provided to update. Please include an 'email' or API keys." },
+            { status: 400 }
         );
-
-        // Handle case where user is not found
-        if (!result.value) {
-            return NextResponse.json(
-                { error: "User not found with the provided email." },
-                { status: 404 }
-            );
-        }
-
-        // Return the updated user
-        return NextResponse.json({
-            message: "User updated successfully.",
-            user: result.value,
-        });
     } catch (error) {
-        // Catch and log any errors
         console.error("Database query failed:", error);
         return NextResponse.json(
             { error: "An internal server error occurred." },
@@ -106,6 +181,7 @@ export const PUT = async (req) => {
         );
     }
 };
+
 
 
 
@@ -253,3 +329,4 @@ const handleRegistration = async (data) => {
 //         return NextResponse.json({ error: "Failed to update API keys" }, { status: 500 });
 //     }
 // }
+

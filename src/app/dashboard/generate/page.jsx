@@ -25,7 +25,7 @@ export default function Page() {
   
   function updategneinfo (){
     setFetchData(!fetchData)
-    console.log("update info response in generate page ",fetchData)
+    
   }
 
 

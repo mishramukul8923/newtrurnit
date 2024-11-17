@@ -115,11 +115,11 @@ export function NavMain({ items="" ,  updateinfo="" , updategneinfo =""}) {
     })) : [],
   });
   
-  // data.push({
-  //   title: "See All",
-  //   url: "/dashboard/historygenerate",
-  //   key: "see-all-historygenerate",
-  // });
+  data.push({
+    title: "See All",
+    url: "/dashboard/historygenerate",
+    key: "see-all-historygenerate",
+  });
   
   
 
@@ -155,7 +155,7 @@ export function NavMain({ items="" ,  updateinfo="" , updategneinfo =""}) {
       <SidebarGroupLabel>Features</SidebarGroupLabel>
       <SidebarMenu>
         {data.map((item, index) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+          <Collapsible  key={item.key || `${item.title}-${index}`}  asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <a href={item.url}>

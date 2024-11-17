@@ -22,24 +22,20 @@ const HistoryGenerate = () => {
   
     const router = useRouter();
 
-      const saveKeyAndNavigate = ( item) => {
-   
-        // Save the keyword to local storage
-       
-        console.log("my key  in history item: ", item)
-    
-        localStorage.setItem('keyword', JSON.stringify({
-          title: item.text,
-          createdId: item.created
-        }));
-    
-        i
-          router.push('/dashboard/generate');
-          updateinfo()
-    
-    
-        // Navigate to the new page
-      };
+     const saveKeyAndNavigate = (item) => {
+    console.log("my key in history item: ", item);
+
+    localStorage.setItem('keyword', JSON.stringify({
+        title: item.text,
+        createdId: item.createdAt
+    }));
+
+    if (typeof updategneinfo === "function") {
+        updategneinfo();
+    }
+
+    router.push('/dashboard/generate');
+};
 
 
 
@@ -71,11 +67,12 @@ const getUserId = () => {
         getUserId();
         const geneHistory = async () => {
             try {
-                const response = await fetch(`/api/history/generator/${userId}`);
+                const response = await fetch(`/api/history/generator/672daf0549f3b3dcda8d069b`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
                 const result = await response.json();
+                console.log ("this history generate result", result)
                 setGeneratorHistory(result);
             } catch (error) {
                 setError(error.message);
@@ -140,7 +137,8 @@ const getUserId = () => {
 
             <div className={styles.turnitHumanizerHistory}>
                 {loading ? (
-                    <p>   <div className="ml-loader">
+                    <div>  
+                         <div className="ml-loader">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -153,7 +151,7 @@ const getUserId = () => {
                     <div></div>
                     <div></div>
                     <div></div>
-                </div></p>
+                </div></div>
                 ) : error ? (
                     <p>{error}</p>
                 ) : paginatedData.length > 0 ? (

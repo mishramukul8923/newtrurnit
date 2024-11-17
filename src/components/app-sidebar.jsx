@@ -316,7 +316,9 @@ export function AppSidebar({
       <SidebarContent>
         <NavDash items={data.navDash} />
         <NavDash navdash={data.navdash} />
-        <NavMain items={genHistory} updateinfo={props.updateinfo } updategneinfo={props.updategneinfo}/>
+        <NavMain items={genHistory} 
+  updateinfo={props.updateinfo}  
+  updategneinfo={props.updategneinfo}/>
         {/* <NavMain items={data.navMain}/> */}
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />

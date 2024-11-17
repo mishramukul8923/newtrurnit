@@ -22,10 +22,18 @@ import { useRouter } from 'next/navigation';
 
 const DashAccount = () => {
     const router = useRouter()
-    const [userDetails, setUserDetails] = useState(null);
+    const [userDetails, setUserDetails] = useState({
+        firstname:null,
+        lastname:null,
+        email:null,
+        apikey:null
+    });
     const [image, setImage] = useState(null);
     const [token, setToken] = useState(null);
     const [success, setSuccess] = useState(false)
+    const[name , setname] = useState('')
+    const[email , setemail] = useState('')
+    const[apikey , setapikey] = useState('')
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -143,6 +151,48 @@ const DashAccount = () => {
     };
 
 
+    const handleEditProfile = async () => {
+        try {
+            const userId = localStorage.getItem('userId');
+            console.log('Attempting to update profile for userId:', userId);
+            console.log('Update payload:', { userId, name, email, apikey });
+
+            const response = await fetch('/api/users/editprofile', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    name: userDetails?.firstname,
+                    email: userDetails?.email,
+                    apikey:userDetails?.apikey,
+                })
+            });
+
+            console.log('Response status:', response.status);
+
+            if (!response.ok) {
+                console.error('Response not OK:', response.status, response.statusText);
+                throw new Error('Failed to update profile');
+            }
+
+            const result = await response.json();
+            console.log('Update result:', result);
+
+            if (result.success) {
+                setSuccess(true);
+            } else {
+                throw new Error(result.error || 'Failed to update profile');
+            }
+
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            setError(error.message);
+        }
+    };
+
+ 
 
 
 
@@ -331,7 +381,10 @@ const DashAccount = () => {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><g clipPath="url(#clip0_346_13990)"><path d="M22.1511 15.0771C21.8209 15.0771 21.5533 15.3447 21.5533 15.6748V20.9819C21.5522 21.9719 20.7501 22.7742 19.7602 22.7751H2.98862C1.99864 22.7742 1.19662 21.9719 1.19545 20.9819V5.40586C1.19662 4.41611 1.99864 3.61385 2.98862 3.61268H8.29576C8.62591 3.61268 8.89348 3.34511 8.89348 3.01496C8.89348 2.68504 8.62591 2.41724 8.29576 2.41724H2.98862C1.33881 2.4191 0.00186789 3.75605 0 5.40586V20.9822C0.00186789 22.632 1.33881 23.9689 2.98862 23.9708H19.7602C21.41 23.9689 22.7469 22.632 22.7488 20.9822V15.6748C22.7488 15.3447 22.4812 15.0771 22.1511 15.0771Z" fill="#FFF"></path><path d="M22.5121 0.878905C21.4616 -0.171549 19.7586 -0.171549 18.7081 0.878905L8.04433 11.5427C7.97124 11.6158 7.91848 11.7064 7.89093 11.8058L6.48861 16.8685C6.43094 17.0761 6.48954 17.2983 6.64178 17.4508C6.79424 17.603 7.01652 17.6616 7.22409 17.6042L12.2868 16.2017C12.3862 16.1741 12.4768 16.1213 12.5499 16.0483L23.2134 5.38425C24.2623 4.3331 24.2623 2.63145 23.2134 1.5803L22.5121 0.878905ZM9.34671 11.9312L18.0742 3.20349L20.8889 6.01817L12.1612 14.7459L9.34671 11.9312ZM8.78448 13.0594L11.0332 15.3083L7.92268 16.1701L8.78448 13.0594ZM22.3682 4.53903L21.7343 5.17295L18.9194 2.35804L19.5536 1.72412C20.137 1.14064 21.0831 1.14064 21.6666 1.72412L22.3682 2.42552C22.9508 3.0097 22.9508 3.95508 22.3682 4.53903Z" fill="#FFF"></path></g><defs><clipPath id="clip0_346_13990"><rect width="24" height="24" fill="white"></rect></clipPath></defs></svg>
                                 </button>
                             </DialogTrigger>
+
+                            {/* ============edit profile ========= */}
                             <DialogContent className="sm:max-w-[425px]">
+                                <form onSubmit={handleEditProfile}>
                                 <DialogHeader>
                                     <DialogTitle>Edit Profile</DialogTitle>
                                     <DialogDescription>
@@ -346,7 +399,11 @@ const DashAccount = () => {
                                         <Input
                                             id="name"
                                             placeholder="Enter Name"
-                                            // defaultValue="Pedro Duarte"
+                                            value={userDetails?.firstname}
+                                            onChange={(e) => setUserDetails({
+                                                ...userDetails,
+                                                firstname: e.target.value
+                                            })}
                                             className="col-span-3"
                                         />
                                     </div>
@@ -358,17 +415,27 @@ const DashAccount = () => {
                                             type="email"
                                             id="username"
                                             placeholder="Enter Email"
+                                            value={userDetails?.email}
+                                            onChange={(e) => setUserDetails({
+                                                ...userDetails,
+                                                email: e.target.value
+                                            })}
                                             // defaultValue="@peduarte"
                                             className="col-span-3"
                                         />
                                     </div>
                                     <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="name" className="text-right">
+                                        <Label htmlFor="name" className="text-right"  id="apikey">
                                             API Key
                                         </Label>
                                         <Input
-                                            id="name"
+                                            id="apikey"
                                             placeholder="Enter API Key"
+                                            value={userDetails?.apikey}
+                                            onChange={(e) => setUserDetails({
+                                                ...userDetails,
+                                                apikey: e.target.value
+                                            })}
                                             // defaultValue="Pedro Duarte"
                                             className="col-span-3"
                                         />
@@ -378,7 +445,10 @@ const DashAccount = () => {
                                 <DialogFooter>
                                     <Button type="submit">Save changes</Button>
                                 </DialogFooter>
+                                </form>
                             </DialogContent>
+
+                            {/* =========edit form end======= */}
                         </Dialog>
                     </div>
 
