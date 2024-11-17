@@ -85,7 +85,6 @@ function Verify() {
                     />
                 </div> */}
                 <div>
-sd
              <div>{verified}</div>  
                 </div>
               
