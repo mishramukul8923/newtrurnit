@@ -309,6 +309,23 @@ align-items: center;
   }
 }
 
+.turnitLoginbgverif{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 60px;
+  font-weight: bold;
+}
+.turnitLoginbgverif h1 span{
+color: #1EC53C;
+}
+.imageContainerLogo{
+  display: flex;
+  justify-content: center;
+}
+
+
 
 
 

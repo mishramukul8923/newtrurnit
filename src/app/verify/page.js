@@ -56,32 +56,34 @@ function Verify() {
 
   return (
     <>
-    <div className="container">
-        <div className="turnitLoginbg">
+    {/* <div className="container"> */}
+        <div className="turnitLoginbgverif">
             {/* Left Side - Image and Text */}
             <div className="left-side">
-                <h1>
-                    Unlock the Power of{' '}
-                    <span className="highlight">TurnitHuman</span> Copywriting Tool
-                </h1>
-                <div className="imageContainerLogo">
+            <div className="imageContainerLogo">
                     <Image
-                        src="/images/login-bg.svg" // Use absolute path
+                        src="/images/turnit-logo.svg" // Use absolute path
                         alt="Login img"
                         fluid // Makes the image responsive
                     />
                 </div>
+                {/* <h1>
+                    Unlock the Power of{' '}
+                    <span className="highlight">TurnitHuman</span> Copywriting Tool
+                </h1> */}
+                <h1>Verified <span>Successfully</span></h1>
+               
             </div>
 
             {/* Right Side - Login Form */}
             <div className="right-side">
-                <div className="logo-section">
+                {/* <div className="logo-section">
                     <Image
-                        src="/images/logo-login.svg" // Use absolute path
+                        src="/images/verfi.jpg" // Use absolute path
                         alt="Login img"
                         fluid // Makes the image responsive
                     />
-                </div>
+                </div> */}
                 <div>
 
              <div>{verified}</div>  
@@ -90,12 +92,11 @@ function Verify() {
                
             </div>
         </div>
-    </div>
+    {/* </div> */}
     
 </>
   );
 }
-
 
 
 

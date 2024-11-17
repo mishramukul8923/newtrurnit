@@ -55,7 +55,7 @@ const Generate = ({fetchData}) => {
             setIsFirstContainerVisible(false)
             // const fetchHistoryData = async (userId) => {
             // try {
-            const response = await fetch('/api/history/generator/672daf0549f3b3dcda8d069b');
+            const response = await fetch(`/api/history/generator/${user_id}`);
            
 
             // Check if the response is successful

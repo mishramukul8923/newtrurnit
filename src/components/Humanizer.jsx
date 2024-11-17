@@ -143,7 +143,7 @@ const Humanizer = ({ fetchData }) => {
         try {
             const token = localStorage.getItem('token');
             if (token) {
-                const email = DecodeTokenEmail(token);
+              const email = DecodeTokenEmail(token);
                 if (email) {
                     const userDetails = await FetchUserDetails(email);
                     console.log("this is generate usre current id", userDetails[0]._id)
