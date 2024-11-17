@@ -15,9 +15,9 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       authorization: {
-        params: {
-          redirect_uri: 'https://newtrurnit.vercel.app/api/auth/callback/google', // Your correct redirect URI here
-        },
+        // params: {
+        //   redirect_uri: 'https://newtrurnit.vercel.app/api/auth/callback/google', // Your correct redirect URI here
+        // },
       },
     }),
     
