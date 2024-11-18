@@ -35,7 +35,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 
 export function NavUser({ user }) {
-
+ console.log("i got this in nav-user ", user)
 
   const { isMobile } = useSidebar();
   const router = useRouter();
@@ -96,7 +96,8 @@ export function NavUser({ user }) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user?.image} alt={user?.name} />
+                <AvatarImage src={user?.image || '/images/default-avatar.png'} // Add a fallback image
+    alt={user?.name || 'User Avatar'} />
                 {/* <AvatarFallback className="rounded-lg">CN</AvatarFallback> */}
                 <AvatarFallback className="rounded-lg"></AvatarFallback>
 

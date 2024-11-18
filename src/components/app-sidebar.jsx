@@ -135,11 +135,11 @@ const data = {
     // },
   ],
   projects: [
-    {
-      name: "History",
-      url: "/dashboard/history",
-      icon: <LuHistory />,
-    },
+    // {
+    //   name: "History", 
+    //   url: "/dashboard/history",
+    //   icon: <LuHistory />,
+    // },
 
     {
       name: "Insert Your Key",
