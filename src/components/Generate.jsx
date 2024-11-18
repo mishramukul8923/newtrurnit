@@ -136,8 +136,8 @@ const Generate = ({fetchData}) => {
     }, [fineData, nextInput, text])
 
     const handlehumanTextChange = () => {
-        sethumanCharCount(fineData.length);
-        sethumanWordCount(fineData.trim().split(/\s+/).length);
+        sethumanCharCount(fineData && fineData.length);
+        sethumanWordCount(fineData && fineData.trim().split(/\s+/).length);
         console.log("humanized content", showHumanizerContent)
     };
 

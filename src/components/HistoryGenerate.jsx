@@ -66,20 +66,21 @@ const getUserId = () => {
     useEffect(() => {
         getUserId();
         const geneHistory = async () => {
+          
             try {
                 const response = await fetch(`/api/history/generator/672daf0549f3b3dcda8d069b`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
                 const result = await response.json();
-                console.log ("this history generate result", result)
                 setGeneratorHistory(result);
             } catch (error) {
                 setError(error.message);
             } finally {
                 setLoading(false);
             }
-        };
+        }
+     
 
         geneHistory();
     }, []);

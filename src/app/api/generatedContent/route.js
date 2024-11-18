@@ -26,9 +26,9 @@ export const POST = async (req) => {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    let newPlan = -1;
+    let newPlan = 1;
     if (users.plan_id == -1) {
-      newPlan = -1;
+      newPlan = 1;
     } else if (users.plan_id == 0) {
       const humanizerCount = await db.collection('humanizer').find({ user_id }).count();
       const generatorCount = await db.collection('generator').find({ user_id }).count();
